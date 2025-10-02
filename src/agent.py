@@ -18,10 +18,11 @@ from rich.text import Text
 
 # LangChain imports
 from langchain_ollama import OllamaLLM
-from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationChain
 from langchain.prompts import PromptTemplate
 from langchain.schema import BaseOutputParser
+from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_community.chat_message_histories import ChatMessageHistory
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 # Load environment variables from .env file
 load_dotenv()
@@ -74,10 +75,7 @@ class LangChainAgent():
             raise
         
         # Set up conversation memory
-        self.memory = ConversationBufferMemory(
-            return_message=False,
-            memory_key="history"
-        )
+        self.memory = ChatMessageHistory()
 
         # Agent's personality and instructions
         self.prompt_template = PromptTemplate(
@@ -108,11 +106,11 @@ class LangChainAgent():
         )
 
         # Create the conversation chain
-        self.conversation = ConversationChain(
-            llm=self.llm,
-            memory=self.memory,
-            prompt=self.prompt_template,
-            verbose=False
+        self.conversation = RunnableWithMessageHistory(
+            self.prompt_template | self.llm,
+            lambda _: self.memory,
+            input_messages_key="input",
+            history_messages_key="history"
         )
 
         self._display_startup_message()
@@ -236,12 +234,12 @@ class LangChainAgent():
         except Exception as e:
             self.console.print(f"\n[red]And unexpected error occurred: {str(e)}[/red]")
 
-    def get_conversation_summary(self):
+    def get_memory(self, _):
         """
         Get a summary of the conversation from memory.
         """
         if hasattr(self.memory, 'buffer'):
-            return self.memory.buffer
+            return self.memory
         return "No conversation history yet."
 
 # Function to create and run the agent
