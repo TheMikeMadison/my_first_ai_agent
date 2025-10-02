@@ -49,7 +49,6 @@ class LangChainAgent():
         # Set up the agent's identity
         self.name = name or os.getenv("AGENT_NAME", "LangChainAgent")
         self.version = os.getenv("AGENT_VERSION", "1.1.0")
-        # self.version = model_name
         self.model_name = model_name
 
         # Set up beautiful console output
