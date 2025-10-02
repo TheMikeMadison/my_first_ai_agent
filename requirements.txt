@@ -1,5 +1,12 @@
-# AI and Language Model Libraries
-openai>=2.0.a
+# AI Agent Framework
+langchain>=0.3.1
+langchain-community>=0.0.10
+langchain-core>=0.3.1
+langchain-ollama>=0.1.0
+
+# Local LLM Support
+ollama==0.1.7
+# Alternative: huggingface_hub==0.19.4
 
 # Environment and Configuration
 python-dotenv==1.0.0
