@@ -1,0 +1,14 @@
+# AI and Language Model Libraries
+openai==1.3.7
+
+# Environment and Configuration
+python-dotenv==1.0.0
+
+# HTTP Requests and Web Interactions
+requests==2.31.0
+
+# Beautiful Terminal Output
+rich==13.7.0
+
+# Development and Testing
+pytest==7.4.3
